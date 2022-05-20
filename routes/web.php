@@ -19,7 +19,7 @@ use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return 'welcome';
 });
 
 Route::get('/news', [NewsController::class, 'index'])
