@@ -28,4 +28,20 @@ class News extends Model
 		return $this->belongsTo(Category::class, 'category_id',
 		'id');
 	}
+	//scopes
+
+	public function scopeActive($query)
+	{
+		return $query->where('status', 'ACTIVE');
+	}
+
+	public function scopeDraft($query)
+	{
+		return $query->where('status', 'DRAFT');
+	}
+
+	public function scopeBlocked($query)
+	{
+	return $query->where('status', 'BLOCKED');
+	}
 }

@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\News;
 use App\Queries\QueryBuilderNews;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateRequest;
+use resources\lang\ru\message;
 
 
 class NewsController extends Controller
@@ -54,10 +56,10 @@ class NewsController extends Controller
            
         if($news) {
 			return redirect()->route('admin.news.index')
-				->with('success', 'Запись успешно добавлена');
+				->with('success', __('message.admin.news.create.success'));
 		}
 
-		return back()->with('error', 'Ошибка добавления');
+		return back()->with('error', __('message.admin.news.create.fail'));
     }
 
     /**
@@ -93,18 +95,19 @@ class NewsController extends Controller
      * @param  News $news
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, News $news)
+    public function update(UpdateRequest $request, News $news)
     {
-        $validated = $request->except(['_token', 'image']);
+                
+	    $validated = $request->validated();
 		$validated['slug'] = \Str::slug($validated['title']);
 
 		$news = $news->fill($validated);
 		if($news->save()) {
 			return redirect()->route('admin.news.index')
-				->with('success', 'Запись успешно обновлена');
+				->with('success', __('message.admin.news.update.success'));
 		}
 
-		return back()->with('error', 'Ошибка обновления');
+		return back()->with('error', __('message.admin.news.update.fail'));
     
     }
 
@@ -116,6 +119,14 @@ class NewsController extends Controller
      */
     public function destroy(News $news)
     {
-        //
+        try {
+            $news->delete();
+            return response()->json('ok');
+
+        }catch (\Exception $e) {
+            \Log::error($e->getMessage());
+
+            return response()->json('error', 400);
+        }
     }
 }
