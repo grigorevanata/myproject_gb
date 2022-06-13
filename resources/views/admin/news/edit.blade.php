@@ -11,7 +11,7 @@
     <div class="row">
         @include('inc.messages')
 
-        <form method="post" action="{{ route('admin.news.update', ['news' => $news]) }}">
+        <form method="post" action="{{ route('admin.news.update', ['news' => $news]) }}" enctype="multipart/form-data">
             @csrf
             @method('put')
 
@@ -45,6 +45,9 @@
             </div>
             <div class="form-group">
                 <label for="image">Изображение</label>
+                @if($news->image)
+                    <img src="{{ Storage::url($news->image) }}" style="width: 350px;">
+                @endif
                 <input type="file" id="image" name="image" class="form-control">
             </div>
             <div class="form-group">
@@ -57,3 +60,14 @@
     </div>
 
 @endsection
+
+@push('js')
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#description' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+@endpush

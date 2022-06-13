@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class News extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
 
     protected $fillable = [
 		'category_id', 'title',
@@ -43,5 +44,15 @@ class News extends Model
 	public function scopeBlocked($query)
 	{
 	return $query->where('status', 'BLOCKED');
+	}
+
+
+	public function sluggable(): array
+	{
+		return [
+			'slug' => [
+				'source' => 'title'
+			]
+		];
 	}
 }

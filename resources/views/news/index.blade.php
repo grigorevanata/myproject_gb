@@ -5,15 +5,17 @@
         @forelse($newsList as $news)
         <div class="col">
             <div class="card shadow-sm">
-                <img src="{{ $news['image'] }}" style="width:200px;">
-                <div class="card-body">
+                @if($news->image)
+                <img src="{{ Storage::disk('upload')->url($news['image']) }}" style="width:200px;">
+                @endif
+                    <div class="card-body">
                     <strong>
-                        <a href="{{ route('news.show', ['id' => $news['id']]) }}">{{ $news['title'] }}</a>
+                        <a href="{{ route('news.show', ['slug' => $news['slug']]) }}">{{ $news['title'] }}</a>
                     </strong>
                     <p class="card-text"> {!! $news['description'] !!} </p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <a href="{{ route('news.show', ['id' => $news['id']]) }}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
+                            <a href="{{ route('news.show', ['slug' => $news['slug']]) }}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
                         </div>
                         <small class="text-muted"><strong>Автор:</strong> {{ $news['author'] }}</small>
                     </div>

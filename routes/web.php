@@ -28,8 +28,10 @@ Route::get('/', function () {
 
 Route::get('/news', [NewsController::class, 'index'])
 	->name('news');
-Route::get('/news/{id}', [NewsController::class, 'show'])
-	->where('id', '\d+')
+
+
+Route::get('/news/{slug}', [NewsController::class, 'show'])
+	->where('slug', '[a-zA-Z0-9\-\_]+')
 	->name('news.show');
 
 Route::group(['middleware' => 'auth'], function(){

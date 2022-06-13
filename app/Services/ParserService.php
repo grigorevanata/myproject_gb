@@ -18,11 +18,11 @@ class ParserService implements Parser
 		return $this;
     }
 
-    public function parse(): array
+    public function parse(): void
 	{
 		$xml = XmlParser::load($this->link);
 
-		return $xml->parse([
+		$data = $xml->parse([
 			'title' => [
 				'uses' => 'channel.title'
 			],

@@ -7,8 +7,9 @@ use App\Models\Category;
 use App\Models\News;
 use App\Queries\QueryBuilderNews;
 use Illuminate\Http\Request;
-use App\Http\Requests\UpdateRequest;
+use App\Http\Requests\News\UpdateRequest;
 use resources\lang\ru\message;
+use App\Services\UploadService;
 
 
 class NewsController extends Controller
@@ -95,11 +96,17 @@ class NewsController extends Controller
      * @param  News $news
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest $request, News $news)
+    public function update(UpdateRequest $request, News $news, UploadService $uploadService)
     {
                 
 	    $validated = $request->validated();
 		$validated['slug'] = \Str::slug($validated['title']);
+
+
+        //file upload
+		if($request->hasFile('image')) {
+			$validated['image'] = $uploadService->uploadImage($request->file('image'));
+		}
 
 		$news = $news->fill($validated);
 		if($news->save()) {
